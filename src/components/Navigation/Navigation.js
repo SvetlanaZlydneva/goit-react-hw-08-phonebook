@@ -3,8 +3,8 @@ import T from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { BasePathRoute } from '../../routes';
-import styles from './Navigation.module.css';
 import { UsersSelectors } from '../../redux/users';
+import styles from './Navigation.module.css';
 
 const Navigation = ({ isAuthenticated }) => (
   <nav>

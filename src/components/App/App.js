@@ -1,11 +1,13 @@
 import React, { Suspense, lazy, Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import T from 'prop-types';
 import { connect } from 'react-redux';
+import T from 'prop-types';
+import { BasePathRoute, PrivateRoute, PublicRoute } from '../../routes';
+import { UsersOperations, UsersSelectors } from '../../redux/users';
+import { ContactsSelectors } from '../../redux/contacts';
 import AppBar from '../AppBar';
 import Loader from '../Loader';
-import { BasePathRoute, PrivateRoute, PublicRoute } from '../../routes';
-import { UsersOperations } from '../../redux/users';
+import errorMessage from '../../helpers/errorMessage';
 
 const HomeView = lazy(() =>
   import('../../views/HomeView' /* webpackChunkName: "home-view" */),
@@ -21,8 +23,15 @@ const RegisterView = lazy(() =>
 );
 
 class App extends Component {
+  static defaultProps = {
+    errorUser: null,
+    errorContacts: null,
+  };
+
   static propTypes = {
     onGetCurrentUser: T.func.isRequired,
+    errorUser: T.string,
+    errorContacts: T.string,
   };
 
   componentDidMount() {
@@ -31,6 +40,9 @@ class App extends Component {
   }
 
   render() {
+    const { errorUser, errorContacts } = this.props;
+    if (errorUser) errorMessage.showError(errorUser);
+    if (errorContacts) errorMessage.showError(errorContacts);
     return (
       <>
         <AppBar />
@@ -61,8 +73,13 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  errorUser: UsersSelectors.getError(state),
+  errorContacts: ContactsSelectors.getError(state),
+});
+
 const mapDispatchToProps = {
   onGetCurrentUser: UsersOperations.getCurrentUser,
 };
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

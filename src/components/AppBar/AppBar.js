@@ -5,8 +5,8 @@ import { UsersSelectors } from '../../redux/users';
 import Navigation from '../Navigation';
 import UserMenu from '../UserMenu';
 import Authenticated from '../Authenticated';
-import styles from './AppBar.module.css';
 import Container from '../Container';
+import styles from './AppBar.module.css';
 
 const AppBar = ({ isAuthenticated }) => (
   <header className={styles.AppBar}>
